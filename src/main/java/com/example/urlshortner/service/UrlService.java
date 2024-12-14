@@ -15,11 +15,16 @@ import com.example.urlshortner.repository.UrlRepository;
 public class UrlService {
 
 private final UrlRepository urlRepository;
-private static final String BASE_URL = "http://short.ly/";
+private static final String BASE_URL = "http://localhost:8080/";
 public UrlService(UrlRepository urlRepository) {
     this.urlRepository = urlRepository;  // Initialize the final field via the constructor
 }
-
+public Optional<String> getURL(String url)
+{
+	Optional<Url> urlObj=urlRepository.findByModifiedURL(BASE_URL+url);
+	if(urlObj.isPresent())return Optional.of(urlObj.get().getOriginalURL());
+	return null;
+}
 public Optional<String> generateUrl(String url) throws NoSuchAlgorithmException
 {
 	 MessageDigest digest = MessageDigest.getInstance("SHA-256");
